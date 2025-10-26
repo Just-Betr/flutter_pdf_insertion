@@ -12,6 +12,8 @@ class PdfTemplateLoader {
   final AssetBundle _bundle;
   PdfTemplate? _cachedTemplate;
 
+  // This is where the magic happens mainly.
+  // Take our config and load the PDF from assets, rasterize it, and prepare the template pages.
   Future<PdfTemplate> load(final PdfTemplateConfig config) async {
     if (_cachedTemplate != null) {
       return _cachedTemplate!;
@@ -21,7 +23,8 @@ class PdfTemplateLoader {
     final bytes = assetData.buffer.asUint8List();
     final rasters = await Printing.raster(bytes, dpi: config.rasterDpi).toList();
 
-    final sortedPages = List<PdfTemplatePageConfig>.from(config.pages)..sort((final a, final b) => a.page.compareTo(b.page));
+    final sortedPages = List<PdfTemplatePageConfig>.from(config.pages)
+      ..sort((final a, final b) => a.page.compareTo(b.page));
 
     final pages = <PdfTemplatePage>[];
     for (final pageConfig in sortedPages) {

@@ -32,6 +32,7 @@ class PdfFieldBinding {
   String toString() => 'PdfFieldBinding($value)';
 }
 
+/// Immutable description of how to place a single field on a page when building a template.
 class PdfFieldConfig {
   const PdfFieldConfig({
     required this.binding,
@@ -70,6 +71,7 @@ class PdfFieldConfig {
   final bool isRequired;
 }
 
+/// Configuration-time description of a page before the template is loaded from disk.
 class PdfTemplatePageConfig {
   const PdfTemplatePageConfig({required this.page, required this.fields, this.pageFormat});
 
@@ -78,6 +80,7 @@ class PdfTemplatePageConfig {
   final PdfPageFormat? pageFormat;
 }
 
+/// High-level configuration describing how to build a template from an asset.
 class PdfTemplateConfig {
   const PdfTemplateConfig({required this.assetPath, required this.pages, this.pdfName, this.rasterDpi = 144});
 
@@ -87,6 +90,7 @@ class PdfTemplateConfig {
   final double rasterDpi;
 }
 
+/// Runtime template produced once the configuration has been loaded and rasterised.
 class PdfTemplate {
   PdfTemplate({required this.assetPath, required this.name, required this.rasterDpi, required this.pages});
 
@@ -96,6 +100,7 @@ class PdfTemplate {
   final List<PdfTemplatePage> pages;
 }
 
+/// Runtime view of a template page, including the optional background artwork.
 class PdfTemplatePage {
   PdfTemplatePage({required this.index, required this.pageFormat, required this.fields, this.background});
 
@@ -105,6 +110,7 @@ class PdfTemplatePage {
   final MemoryImage? background;
 }
 
+/// Helper for composing complex `PdfTemplateConfig` hierarchies fluently.
 class PdfTemplateConfigBuilder {
   PdfTemplateConfigBuilder({required final String assetPath}) : _assetPath = assetPath;
 
@@ -158,6 +164,7 @@ class PdfTemplateConfigBuilder {
   }
 }
 
+/// Helper that accumulates the fields for a single page during configuration.
 class PdfTemplatePageBuilder {
   PdfTemplatePageBuilder({required this.page, final PdfPageFormat? pageFormat})
     : _pageFormat = pageFormat ?? PdfPageFormat.letter;
