@@ -16,8 +16,6 @@ However, inserting form fields into PDF's seems like a nice to have. I used a fr
 
 Website/Service Used to Apply Fields: https://www.pdfgear.com/create-fillable-pdf/
 
-#Screenshots
-<img width="1080" height="2400" alt="Screenshot_1761446021" src="https://github.com/user-attachments/assets/b930628d-7f6a-488b-b006-c01c0951d033" />
-<img width="1080" height="2400" alt="Screenshot_1761445961" src="https://github.com/user-attachments/assets/87a6ef1f-a2d5-43b7-84d0-478c716157bc" />
-<img width="1080" height="2400" alt="Screenshot_1761445968" src="https://github.com/user-attachments/assets/a61bc94e-e817-48b0-b617-037d0e311172" />
-<img width="1080" height="2400" alt="Screenshot_1761446012" src="https://github.com/user-attachments/assets/e601324c-669b-4b6f-9135-5fb3bd8440e2" />
+# Screenshots
+<img width="300" height="1200" alt="Screenshot 1" src="https://github.com/user-attachments/assets/b930628d-7f6a-488b-b006-c01c0951d033" /> <img width="300" height="1200" alt="Screenshot 2" src="https://github.com/user-attachments/assets/87a6ef1f-a2d5-43b7-84d0-478c716157bc" />
+<img width="300" height="1200" alt="Screenshot 3" src="https://github.com/user-attachments/assets/a61bc94e-e817-48b0-b617-037d0e311172" /> <img width="300" height="1200" alt="Screenshot 4" src="https://github.com/user-attachments/assets/e601324c-669b-4b6f-9135-5fb3bd8440e2" />
