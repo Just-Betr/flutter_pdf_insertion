@@ -6,17 +6,17 @@ import '../models/pdf_form_data.dart';
 import '../services/pdf_service.dart';
 
 abstract interface class PdfFormController {
-  Future<Uint8List> generatePdfBytes(PdfFormData data);
+  Future<Uint8List> generatePdfBytes(final PdfFormData data);
 
-  Future<void> sharePdf(PdfFormData data);
-  Future<void> previewPdf(PdfFormData data);
+  Future<void> sharePdf(final PdfFormData data);
+  Future<void> previewPdf(final PdfFormData data);
 }
 
 // This is the default implementation of PdfFormController.
 // It is the connection between the UI and the PDF generation service.
 // Following a simple MVC pattern.
 class DefaultPdfFormController implements PdfFormController {
-  DefaultPdfFormController({required PdfGenerationService pdfService}) : _pdfService = pdfService;
+  DefaultPdfFormController({required final PdfGenerationService pdfService}) : _pdfService = pdfService;
 
   final PdfGenerationService _pdfService;
 
@@ -42,7 +42,7 @@ class DefaultPdfFormController implements PdfFormController {
   }
 
   String _formatTimestamp(final DateTime datetime) {
-    String twoDigits(int value) => value.toString().padLeft(2, '0');
+    String twoDigits(final int value) => value.toString().padLeft(2, '0');
     final year = datetime.year.toString().padLeft(4, '0');
     final month = twoDigits(datetime.month);
     final day = twoDigits(datetime.day);
@@ -60,16 +60,16 @@ class DefaultPdfFormController implements PdfFormController {
     return buffer.toString();
   }
 
-  String _extractAssetName(String assetPath) {
+  String _extractAssetName(final String assetPath) {
     final normalized = assetPath.replaceAll('\\', '/');
-    final segments = normalized.split('/').where((segment) => segment.isNotEmpty).toList(growable: false);
+    final segments = normalized.split('/').where((final segment) => segment.isNotEmpty).toList(growable: false);
     if (segments.isEmpty) {
       return assetPath;
     }
     return segments.last;
   }
 
-  String _sanitizeBaseName(String value) {
+  String _sanitizeBaseName(final String value) {
     final trimmed = value.trim();
     if (trimmed.isEmpty) {
       return 'document';
@@ -80,6 +80,6 @@ class DefaultPdfFormController implements PdfFormController {
 
   @override
   Future<void> previewPdf(final PdfFormData data) {
-    return Printing.layoutPdf(onLayout: (_) => generatePdfBytes(data));
+    return Printing.layoutPdf(onLayout: (final _) => generatePdfBytes(data));
   }
 }

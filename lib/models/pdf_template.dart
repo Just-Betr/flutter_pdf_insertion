@@ -12,9 +12,9 @@ class PdfFieldBinding {
 
   final String value;
 
-  factory PdfFieldBinding(String name) => PdfFieldBinding.named(name);
+  factory PdfFieldBinding(final String name) => PdfFieldBinding.named(name);
 
-  factory PdfFieldBinding.named(String name) {
+  factory PdfFieldBinding.named(final String name) {
     final normalized = name.trim();
     if (normalized.isEmpty) {
       throw ArgumentError('PdfFieldBinding name cannot be empty');
@@ -23,7 +23,7 @@ class PdfFieldBinding {
   }
 
   @override
-  bool operator ==(Object other) => other is PdfFieldBinding && other.value == value;
+  bool operator ==(final Object other) => other is PdfFieldBinding && other.value == value;
 
   @override
   int get hashCode => value.hashCode;
@@ -106,38 +106,38 @@ class PdfTemplatePage {
 }
 
 class PdfTemplateConfigBuilder {
-  PdfTemplateConfigBuilder({required String assetPath}) : _assetPath = assetPath;
+  PdfTemplateConfigBuilder({required final String assetPath}) : _assetPath = assetPath;
 
   String _assetPath;
   String? _pdfName;
   double _rasterDpi = 144;
   final List<PdfTemplatePageBuilder> _pageBuilders = [];
 
-  PdfTemplateConfigBuilder assetPath(String value) {
+  PdfTemplateConfigBuilder assetPath(final String value) {
     _assetPath = value;
     return this;
   }
 
-  PdfTemplateConfigBuilder pdfName(String value) {
+  PdfTemplateConfigBuilder pdfName(final String value) {
     _pdfName = value;
     return this;
   }
 
-  PdfTemplateConfigBuilder rasterDpi(double value) {
+  PdfTemplateConfigBuilder rasterDpi(final double value) {
     _rasterDpi = value;
     return this;
   }
 
-  PdfTemplatePageBuilder addPage({required int index, PdfPageFormat? pageFormat}) {
+  PdfTemplatePageBuilder addPage({required final int index, final PdfPageFormat? pageFormat}) {
     final builder = PdfTemplatePageBuilder(page: index, pageFormat: pageFormat);
     _pageBuilders.add(builder);
     return builder;
   }
 
   PdfTemplateConfigBuilder page({
-    required int index,
-    PdfPageFormat? pageFormat,
-    void Function(PdfTemplatePageBuilder page)? build,
+    required final int index,
+    final PdfPageFormat? pageFormat,
+    final void Function(PdfTemplatePageBuilder page)? build,
   }) {
     final builder = PdfTemplatePageBuilder(page: index, pageFormat: pageFormat);
     if (build != null) {
@@ -148,7 +148,7 @@ class PdfTemplateConfigBuilder {
   }
 
   PdfTemplateConfig build() {
-    final pages = _pageBuilders.map((builder) => builder.build()).toList(growable: false);
+    final pages = _pageBuilders.map((final builder) => builder.build()).toList(growable: false);
     return PdfTemplateConfig(
       assetPath: _assetPath,
       pdfName: _pdfName ?? inferPdfNameFromAsset(_assetPath),
@@ -159,19 +159,19 @@ class PdfTemplateConfigBuilder {
 }
 
 class PdfTemplatePageBuilder {
-  PdfTemplatePageBuilder({required this.page, PdfPageFormat? pageFormat})
+  PdfTemplatePageBuilder({required this.page, final PdfPageFormat? pageFormat})
     : _pageFormat = pageFormat ?? PdfPageFormat.letter;
 
   final int page;
   PdfPageFormat _pageFormat;
   final List<PdfFieldConfig> _fields = [];
 
-  PdfTemplatePageBuilder pageFormat(PdfPageFormat value) {
+  PdfTemplatePageBuilder pageFormat(final PdfPageFormat value) {
     _pageFormat = value;
     return this;
   }
 
-  PdfTemplatePageBuilder addField(PdfFieldConfig field) {
+  PdfTemplatePageBuilder addField(final PdfFieldConfig field) {
     if (field.pageIndex != page) {
       throw ArgumentError('Field pageIndex ${field.pageIndex} does not match page $page');
     }
@@ -180,20 +180,20 @@ class PdfTemplatePageBuilder {
   }
 
   PdfTemplatePageBuilder addTextField({
-    required PdfFieldBinding binding,
-    required double x,
-    required double y,
-    double? width,
-    double? height,
-    double? fontSize,
-    PdfMeasurementUnit positionUnit = PdfMeasurementUnit.fraction,
-    PdfMeasurementUnit sizeUnit = PdfMeasurementUnit.fraction,
-    PdfTextAlignment? textAlignment,
-    int? maxLines,
-    bool allowWrap = false,
-    bool? shrinkToFit,
-    bool uppercase = false,
-    bool isRequired = true,
+    required final PdfFieldBinding binding,
+    required final double x,
+    required final double y,
+    final double? width,
+    final double? height,
+    final double? fontSize,
+    final PdfMeasurementUnit positionUnit = PdfMeasurementUnit.fraction,
+    final PdfMeasurementUnit sizeUnit = PdfMeasurementUnit.fraction,
+    final PdfTextAlignment? textAlignment,
+    final int? maxLines,
+    final bool allowWrap = false,
+    final bool? shrinkToFit,
+    final bool uppercase = false,
+    final bool isRequired = true,
   }) {
     _fields.add(
       PdfFieldConfig(
@@ -219,14 +219,14 @@ class PdfTemplatePageBuilder {
   }
 
   PdfTemplatePageBuilder addSignatureField({
-    required PdfFieldBinding binding,
-    required double x,
-    required double y,
-    double? width,
-    double? height,
-    PdfMeasurementUnit positionUnit = PdfMeasurementUnit.fraction,
-    PdfMeasurementUnit sizeUnit = PdfMeasurementUnit.fraction,
-    bool isRequired = true,
+    required final PdfFieldBinding binding,
+    required final double x,
+    required final double y,
+    final double? width,
+    final double? height,
+    final PdfMeasurementUnit positionUnit = PdfMeasurementUnit.fraction,
+    final PdfMeasurementUnit sizeUnit = PdfMeasurementUnit.fraction,
+    final bool isRequired = true,
   }) {
     _fields.add(
       PdfFieldConfig(
@@ -250,20 +250,20 @@ class PdfTemplatePageBuilder {
   }
 
   PdfTemplatePageBuilder textField({
-    required PdfFieldBinding binding,
-    required double x,
-    required double y,
-    double? width,
-    double? height,
-    double fontSize = 12.0,
-    PdfMeasurementUnit positionUnit = PdfMeasurementUnit.points,
-    PdfMeasurementUnit sizeUnit = PdfMeasurementUnit.points,
-    PdfTextAlignment? textAlignment,
-    int? maxLines,
-    bool allowWrap = false,
-    bool? shrinkToFit,
-    bool uppercase = false,
-    bool isRequired = true,
+    required final PdfFieldBinding binding,
+    required final double x,
+    required final double y,
+    final double? width,
+    final double? height,
+    final double fontSize = 12.0,
+    final PdfMeasurementUnit positionUnit = PdfMeasurementUnit.points,
+    final PdfMeasurementUnit sizeUnit = PdfMeasurementUnit.points,
+    final PdfTextAlignment? textAlignment,
+    final int? maxLines,
+    final bool allowWrap = false,
+    final bool? shrinkToFit,
+    final bool uppercase = false,
+    final bool isRequired = true,
   }) {
     return addTextField(
       binding: binding,
@@ -284,14 +284,14 @@ class PdfTemplatePageBuilder {
   }
 
   PdfTemplatePageBuilder signatureField({
-    PdfFieldBinding? binding,
-    required double x,
-    required double y,
-    double? width,
-    double? height,
-    PdfMeasurementUnit positionUnit = PdfMeasurementUnit.points,
-    PdfMeasurementUnit sizeUnit = PdfMeasurementUnit.points,
-    bool isRequired = true,
+    final PdfFieldBinding? binding,
+    required final double x,
+    required final double y,
+    final double? width,
+    final double? height,
+    final PdfMeasurementUnit positionUnit = PdfMeasurementUnit.points,
+    final PdfMeasurementUnit sizeUnit = PdfMeasurementUnit.points,
+    final bool isRequired = true,
   }) {
     return addSignatureField(
       binding: binding ?? PdfFieldBinding.named('signature'),
@@ -306,9 +306,9 @@ class PdfTemplatePageBuilder {
   }
 }
 
-String inferPdfNameFromAsset(String assetPath) {
+String inferPdfNameFromAsset(final String assetPath) {
   final normalized = assetPath.replaceAll('\\', '/');
-  final segments = normalized.split('/').where((segment) => segment.isNotEmpty).toList(growable: false);
+  final segments = normalized.split('/').where((final segment) => segment.isNotEmpty).toList(growable: false);
   if (segments.isEmpty) {
     return assetPath;
   }

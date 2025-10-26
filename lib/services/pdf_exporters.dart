@@ -1,4 +1,4 @@
-﻿import 'dart:math';
+import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
 
@@ -11,7 +11,7 @@ import 'pdf_template_loader.dart';
 
 /// Abstract PDF exporter defining the strategy for rendering a document.
 abstract class PdfExporter {
-  Future<Uint8List> export(PdfFormData data);
+  Future<Uint8List> export(final PdfFormData data);
 }
 
 /// Factory that produces the concrete [PdfExporter] implementation.
@@ -20,7 +20,7 @@ class PdfExporterFactory {
 
   static PdfTemplateConfig get defaultTemplateConfig => _defaultTemplateConfig;
 
-  static PdfExporter createSimpleExporter({PdfTemplateConfig? config, PdfTemplateLoader? loader}) {
+  static PdfExporter createSimpleExporter({final PdfTemplateConfig? config, final PdfTemplateLoader? loader}) {
     final resolvedConfig = config ?? _defaultTemplateConfig;
     return _TemplatePdfExporter(loader: loader ?? PdfTemplateLoader(), config: resolvedConfig);
   }
@@ -46,7 +46,7 @@ PdfTemplateConfig _buildExampleTemplateConfig() {
   builder
       .page(
         index: 0,
-        build: (page) {
+        build: (final page) {
           page
             ..textField(binding: firstName, x: 135.375, y: 192.0, width: 102.0, height: 18.0, maxLines: 1)
             ..textField(binding: lastName, x: 133.875, y: 219.75, width: 100.5, height: 18.0, maxLines: 1);
@@ -54,7 +54,7 @@ PdfTemplateConfig _buildExampleTemplateConfig() {
       )
       .page(
         index: 1,
-        build: (page) {
+        build: (final page) {
           page
             ..textField(binding: isKewl, x: 92.374, y: 106.504, width: 7.748, height: 9.503, isRequired: false)
             ..signatureField(binding: signature, x: 129.619, y: 164.501, width: 193.747, height: 20.002)
@@ -66,7 +66,7 @@ PdfTemplateConfig _buildExampleTemplateConfig() {
 }
 
 class _TemplatePdfExporter implements PdfExporter {
-  _TemplatePdfExporter({required PdfTemplateLoader loader, required PdfTemplateConfig config})
+  _TemplatePdfExporter({required final PdfTemplateLoader loader, required final PdfTemplateConfig config})
     : _loader = loader,
       _config = config;
 
@@ -75,7 +75,7 @@ class _TemplatePdfExporter implements PdfExporter {
   PdfTemplate? _template;
 
   @override
-  Future<Uint8List> export(PdfFormData data) async {
+  Future<Uint8List> export(final PdfFormData data) async {
     _template ??= await _loader.load(_config);
     final template = _template!;
 
@@ -83,7 +83,7 @@ class _TemplatePdfExporter implements PdfExporter {
     if (data.signatureStrokes.isNotEmpty) {
       final targetHeights = <double>{};
       for (final page in template.pages) {
-        for (final field in page.fields.where((field) => field.type == PdfFieldType.signature)) {
+        for (final field in page.fields.where((final field) => field.type == PdfFieldType.signature)) {
           final targetHeight =
               _resolveSize(value: field.height, axisExtent: page.pageFormat.height, unit: field.sizeUnit) ??
               page.pageFormat.height * 0.15;
@@ -108,7 +108,7 @@ class _TemplatePdfExporter implements PdfExporter {
         Page(
           pageFormat: page.pageFormat,
           margin: EdgeInsets.zero,
-          build: (context) =>
+          build: (final context) =>
               _buildPage(page: page, data: data, signatureImages: signatureImages, timestamp: timestamp),
         ),
       );
@@ -118,10 +118,10 @@ class _TemplatePdfExporter implements PdfExporter {
   }
 
   Widget _buildPage({
-    required PdfTemplatePage page,
-    required PdfFormData data,
-    required Map<String, MemoryImage?> signatureImages,
-    required DateTime timestamp,
+    required final PdfTemplatePage page,
+    required final PdfFormData data,
+    required final Map<String, MemoryImage?> signatureImages,
+    required final DateTime timestamp,
   }) {
     final children = <Widget>[];
     if (page.background != null) {
@@ -138,11 +138,11 @@ class _TemplatePdfExporter implements PdfExporter {
   }
 
   Widget _buildField({
-    required PdfTemplatePage page,
-    required PdfFieldConfig field,
-    required PdfFormData data,
-    required Map<String, MemoryImage?> signatureImages,
-    required DateTime timestamp,
+    required final PdfTemplatePage page,
+    required final PdfFieldConfig field,
+    required final PdfFormData data,
+    required final Map<String, MemoryImage?> signatureImages,
+    required final DateTime timestamp,
   }) {
     final pageWidth = page.pageFormat.width;
     final pageHeight = page.pageFormat.height;
@@ -226,7 +226,7 @@ class _TemplatePdfExporter implements PdfExporter {
     }
   }
 
-  double _resolveCoordinate({required double value, required double axisExtent, required PdfMeasurementUnit unit}) {
+  double _resolveCoordinate({required final double value, required final double axisExtent, required final PdfMeasurementUnit unit}) {
     switch (unit) {
       case PdfMeasurementUnit.fraction:
         return value * axisExtent;
@@ -235,7 +235,7 @@ class _TemplatePdfExporter implements PdfExporter {
     }
   }
 
-  double? _resolveSize({required double? value, required double axisExtent, required PdfMeasurementUnit unit}) {
+  double? _resolveSize({required final double? value, required final double axisExtent, required final PdfMeasurementUnit unit}) {
     if (value == null) {
       return null;
     }
@@ -247,7 +247,7 @@ class _TemplatePdfExporter implements PdfExporter {
     }
   }
 
-  String _resolveText({required PdfFieldBinding binding, required PdfFormData data, required DateTime timestamp}) {
+  String _resolveText({required final PdfFieldBinding binding, required final PdfFormData data, required final DateTime timestamp}) {
     switch (binding.value) {
       case 'firstName':
         return _safeValue(value: data.firstName);
@@ -271,7 +271,7 @@ class _TemplatePdfExporter implements PdfExporter {
     }
   }
 
-  Alignment _mapAlignment({required PdfTextAlignment alignment}) {
+  Alignment _mapAlignment({required final PdfTextAlignment alignment}) {
     switch (alignment) {
       case PdfTextAlignment.start:
         return Alignment.topLeft;
@@ -282,7 +282,7 @@ class _TemplatePdfExporter implements PdfExporter {
     }
   }
 
-  TextAlign _mapTextAlign({required PdfTextAlignment alignment}) {
+  TextAlign _mapTextAlign({required final PdfTextAlignment alignment}) {
     switch (alignment) {
       case PdfTextAlignment.start:
         return TextAlign.left;
@@ -294,10 +294,10 @@ class _TemplatePdfExporter implements PdfExporter {
   }
 
   Widget _wrapTextWidget({
-    required Widget textWidget,
-    required double? width,
-    required double? height,
-    required PdfFieldConfig field,
+    required final Widget textWidget,
+    required final double? width,
+    required final double? height,
+    required final PdfFieldConfig field,
   }) {
     if (width == null && height == null) {
       return textWidget;
@@ -316,12 +316,12 @@ class _TemplatePdfExporter implements PdfExporter {
     return Container(width: width, height: height, alignment: alignment, child: child);
   }
 
-  String _safeValue({required String value}) {
+  String _safeValue({required final String value}) {
     final trimmed = value.trim();
     return trimmed.isEmpty ? '' : trimmed;
   }
 
-  String _formatDate({required DateTime value}) {
+  String _formatDate({required final DateTime value}) {
     final month = value.month.toString().padLeft(2, '0');
     final day = value.day.toString().padLeft(2, '0');
     final year = value.year.toString().padLeft(4, '0');
@@ -329,12 +329,12 @@ class _TemplatePdfExporter implements PdfExporter {
   }
 }
 
-String _signatureCacheKey(double value) => value.toStringAsFixed(3);
+String _signatureCacheKey(final double value) => value.toStringAsFixed(3);
 
 Future<Uint8List> _renderSignatureAsPng({
-  required List<List<Offset>> strokes,
-  required Size canvasSize,
-  double? targetHeight,
+  required final List<List<Offset>> strokes,
+  required final Size canvasSize,
+  final double? targetHeight,
 }) async {
   if (strokes.isEmpty || canvasSize.width <= 0 || canvasSize.height <= 0) {
     return Uint8List(0);

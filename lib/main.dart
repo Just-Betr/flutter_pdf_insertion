@@ -14,7 +14,7 @@ class PdfEditApp extends StatelessWidget {
   final PdfFormController _controller;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return MaterialApp(
       title: 'PDF Edit',
       debugShowCheckedModeBanner: false,

@@ -16,7 +16,7 @@ class PdfFormPage extends HookWidget {
   // available inside build. Instead of passing context around, we keep
   // them here.
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final firstNameController = useTextEditingController();
     final lastNameController = useTextEditingController();
     final formKey = useMemoized(() => GlobalKey<FormState>());
@@ -148,20 +148,21 @@ class PdfFormPage extends HookWidget {
                       controller: firstNameController,
                       decoration: const InputDecoration(labelText: 'First Name'),
                       textInputAction: TextInputAction.next,
-                      validator: (value) => value != null && value.trim().isNotEmpty ? null : 'Enter a first name',
+                      validator: (final value) =>
+                          value != null && value.trim().isNotEmpty ? null : 'Enter a first name',
                     ),
                     const SizedBox(height: 12),
                     TextFormField(
                       controller: lastNameController,
                       decoration: const InputDecoration(labelText: 'Last Name'),
                       textInputAction: TextInputAction.done,
-                      validator: (value) => value != null && value.trim().isNotEmpty ? null : 'Enter a last name',
+                      validator: (final value) => value != null && value.trim().isNotEmpty ? null : 'Enter a last name',
                     ),
                     CheckboxListTile.adaptive(
                       contentPadding: EdgeInsets.zero,
                       title: const Text('Are you Kewl?'),
                       value: isKewl.value,
-                      onChanged: (value) {
+                      onChanged: (final value) {
                         if (value != null) {
                           isKewl.value = value;
                         }
@@ -171,7 +172,7 @@ class PdfFormPage extends HookWidget {
                     Text('Signature', style: Theme.of(context).textTheme.titleMedium),
                     const SizedBox(height: 8),
                     LayoutBuilder(
-                      builder: (context, constraints) {
+                      builder: (final context, final constraints) {
                         final padWidth = constraints.maxWidth;
                         final padHeight = signatureHeight();
                         return Column(
@@ -181,7 +182,7 @@ class PdfFormPage extends HookWidget {
                             const SizedBox(height: 8),
                             AnimatedBuilder(
                               animation: signatureController,
-                              builder: (context, _) => SizedBox(
+                              builder: (final context, final _) => SizedBox(
                                 width: padWidth,
                                 child: TextButton.icon(
                                   style: TextButton.styleFrom(

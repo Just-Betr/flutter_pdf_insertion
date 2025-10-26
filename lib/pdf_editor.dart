@@ -30,7 +30,7 @@ class PdfFormData {
   final Size signatureCanvasSize;
 }
 
-Future<Uint8List> buildFilledPdf(PdfFormData data) async {
+Future<Uint8List> buildFilledPdf(final PdfFormData data) async {
   final doc = pw.Document();
   final signatureImage = await _renderSignatureAsPng(data.signatureStrokes, data.signatureCanvasSize);
 
@@ -38,7 +38,7 @@ Future<Uint8List> buildFilledPdf(PdfFormData data) async {
     pw.Page(
       pageFormat: PdfPageFormat.letter,
       margin: const pw.EdgeInsets.symmetric(horizontal: 40, vertical: 48),
-      build: (context) {
+      build: (final context) {
         return pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.stretch,
           children: [
@@ -74,7 +74,7 @@ pw.Widget _buildHeader() {
   );
 }
 
-pw.Widget _buildClientSummary(PdfFormData data) {
+pw.Widget _buildClientSummary(final PdfFormData data) {
   return pw.Container(
     decoration: _sectionDecoration(),
     padding: const pw.EdgeInsets.all(16),
@@ -105,7 +105,7 @@ pw.Widget _buildClientSummary(PdfFormData data) {
   );
 }
 
-pw.Widget _buildProjectDetails(PdfFormData data) {
+pw.Widget _buildProjectDetails(final PdfFormData data) {
   return pw.Container(
     decoration: _sectionDecoration(),
     padding: const pw.EdgeInsets.all(16),
@@ -124,7 +124,7 @@ pw.Widget _buildProjectDetails(PdfFormData data) {
   );
 }
 
-pw.Widget _buildEngagementOptions(PdfFormData data) {
+pw.Widget _buildEngagementOptions(final PdfFormData data) {
   return pw.Container(
     decoration: _sectionDecoration(),
     padding: const pw.EdgeInsets.all(16),
@@ -141,7 +141,7 @@ pw.Widget _buildEngagementOptions(PdfFormData data) {
   );
 }
 
-pw.Widget _buildSignatureBlock(PdfFormData data, Uint8List signatureImage) {
+pw.Widget _buildSignatureBlock(final PdfFormData data, final Uint8List signatureImage) {
   const double boxWidth = 360;
   const double boxHeight = 120;
   final hasSignature = signatureImage.isNotEmpty;
@@ -192,7 +192,7 @@ pw.Widget _buildSignatureBlock(PdfFormData data, Uint8List signatureImage) {
   );
 }
 
-pw.Widget _labeledField(String label, String value) {
+pw.Widget _labeledField(final String label, final String value) {
   return pw.Column(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
@@ -212,7 +212,7 @@ pw.Widget _labeledField(String label, String value) {
   );
 }
 
-pw.Widget _checkboxRow(String text, bool value) {
+pw.Widget _checkboxRow(final String text, final bool value) {
   return pw.Row(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
@@ -223,7 +223,7 @@ pw.Widget _checkboxRow(String text, bool value) {
   );
 }
 
-pw.Widget _checkbox(bool checked) {
+pw.Widget _checkbox(final bool checked) {
   return pw.Container(
     width: 14,
     height: 14,
@@ -255,20 +255,20 @@ pw.BoxDecoration _sectionDecoration() {
   );
 }
 
-pw.Widget _sectionTitle(String title) {
+pw.Widget _sectionTitle(final String title) {
   return pw.Text(
     title,
     style: pw.TextStyle(fontSize: 13, fontWeight: pw.FontWeight.bold, color: PdfColors.grey800),
   );
 }
 
-String _formatDate(DateTime value) {
+String _formatDate(final DateTime value) {
   final month = value.month.toString().padLeft(2, '0');
   final day = value.day.toString().padLeft(2, '0');
   return '$month/$day/${value.year}';
 }
 
-Future<Uint8List> _renderSignatureAsPng(List<List<Offset>> strokes, Size canvasSize) async {
+Future<Uint8List> _renderSignatureAsPng(final List<List<Offset>> strokes, final Size canvasSize) async {
   if (strokes.isEmpty || canvasSize.width <= 0 || canvasSize.height <= 0) {
     return Uint8List(0);
   }

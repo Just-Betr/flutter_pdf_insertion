@@ -10,11 +10,11 @@ class SignaturePadController extends ChangeNotifier {
   Size _canvasSize = Size.zero;
   VoidCallback? _clearCallback;
 
-  List<List<Offset>> get strokes => _strokes.map((stroke) => List<Offset>.from(stroke)).toList(growable: false);
+  List<List<Offset>> get strokes => _strokes.map((final stroke) => List<Offset>.from(stroke)).toList(growable: false);
 
   Size get canvasSize => _canvasSize;
 
-  bool get hasSignature => _strokes.any((stroke) => stroke.length > 1);
+  bool get hasSignature => _strokes.any((final stroke) => stroke.length > 1);
 
   bool get isEmpty => !hasSignature;
 
@@ -23,32 +23,32 @@ class SignaturePadController extends ChangeNotifier {
   }
 
   void _bind({
-    required VoidCallback clearCallback,
-    required List<List<Offset>> initialStrokes,
-    required Size canvasSize,
+    required final VoidCallback clearCallback,
+    required final List<List<Offset>> initialStrokes,
+    required final Size canvasSize,
   }) {
     _clearCallback = clearCallback;
     _updateFromWidget(initialStrokes, canvasSize);
   }
 
-  void _unbind(VoidCallback clearCallback) {
+  void _unbind(final VoidCallback clearCallback) {
     if (identical(_clearCallback, clearCallback)) {
       _clearCallback = null;
     }
   }
 
-  void _updateFromWidget(List<List<Offset>> strokes, Size canvasSize) {
+  void _updateFromWidget(final List<List<Offset>> strokes, final Size canvasSize) {
     final hasSameSize = _canvasSize == canvasSize;
     final hasSameStrokes = _hasSameStrokes(strokes);
     if (hasSameSize && hasSameStrokes) {
       return;
     }
-    _strokes = strokes.map((stroke) => List<Offset>.unmodifiable(stroke)).toList(growable: false);
+    _strokes = strokes.map((final stroke) => List<Offset>.unmodifiable(stroke)).toList(growable: false);
     _canvasSize = canvasSize;
     notifyListeners();
   }
 
-  bool _hasSameStrokes(List<List<Offset>> candidate) {
+  bool _hasSameStrokes(final List<List<Offset>> candidate) {
     if (_strokes.length != candidate.length) {
       return false;
     }
@@ -70,7 +70,7 @@ class SignaturePad extends HookWidget {
   final double strokeWidth;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final strokes = useMemoized(() => ValueNotifier<List<List<Offset>>>(<List<Offset>>[]), const []);
     final currentStroke = useRef<List<Offset>>(<Offset>[]);
     final isMounted = useRef<bool>(true);
@@ -87,11 +87,11 @@ class SignaturePad extends HookWidget {
     }, [strokes]);
 
     List<List<Offset>> snapshotStrokes() =>
-        strokes.value.map((stroke) => List<Offset>.from(stroke)).toList(growable: false);
+        strokes.value.map((final stroke) => List<Offset>.from(stroke)).toList(growable: false);
 
     // Defer controller notifications so we never mutate parent state mid-build.
     void scheduleControllerSync() {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((final _) {
         if (!isMounted.value) {
           return;
         }
@@ -129,14 +129,14 @@ class SignaturePad extends HookWidget {
       scrollHold.value = null;
     }
 
-    void startStroke(Offset position) {
+    void startStroke(final Offset position) {
       final newStroke = <Offset>[position];
       currentStroke.value = newStroke;
       strokes.value = <List<Offset>>[...strokes.value, newStroke];
       scheduleControllerSync();
     }
 
-    void handlePanDown(DragDownDetails details) {
+    void handlePanDown(final DragDownDetails details) {
       holdScrollIfNeeded();
       if (currentStroke.value.isNotEmpty) {
         return;
@@ -144,7 +144,7 @@ class SignaturePad extends HookWidget {
       startStroke(details.localPosition);
     }
 
-    void pushPoint(Offset position) {
+    void pushPoint(final Offset position) {
       final active = currentStroke.value;
       if (active.isEmpty) {
         return;
@@ -178,15 +178,15 @@ class SignaturePad extends HookWidget {
               gestures: <Type, GestureRecognizerFactory>{
                 _ImmediatePanGestureRecognizer: GestureRecognizerFactoryWithHandlers<_ImmediatePanGestureRecognizer>(
                   () => _ImmediatePanGestureRecognizer(),
-                  (instance) {
+                  (final instance) {
                     instance.onDown = handlePanDown;
-                    instance.onStart = (details) {
+                    instance.onStart = (final details) {
                       if (currentStroke.value.isEmpty) {
                         startStroke(details.localPosition);
                       }
                     };
-                    instance.onUpdate = (details) => pushPoint(details.localPosition);
-                    instance.onEnd = (_) => finishStroke();
+                    instance.onUpdate = (final details) => pushPoint(details.localPosition);
+                    instance.onEnd = (final _) => finishStroke();
                     instance.onCancel = finishStroke;
                   },
                 ),
@@ -212,7 +212,7 @@ class _SignaturePainter extends CustomPainter {
   final Color color;
 
   @override
-  void paint(Canvas canvas, Size size) {
+  void paint(final Canvas canvas, final Size size) {
     final strokePaint = Paint()
       ..color = color
       ..strokeWidth = strokeWidth
@@ -241,7 +241,7 @@ class _SignaturePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_SignaturePainter oldDelegate) {
+  bool shouldRepaint(final _SignaturePainter oldDelegate) {
     if (oldDelegate.strokeWidth != strokeWidth) {
       return true;
     }
@@ -258,7 +258,7 @@ class _ImmediatePanGestureRecognizer extends PanGestureRecognizer {
   }
 
   @override
-  void addAllowedPointer(PointerDownEvent event) {
+  void addAllowedPointer(final PointerDownEvent event) {
     super.addAllowedPointer(event);
     // Force-accept the pointer so vertical-first strokes are treated as drawing, not scrolling.
     resolvePointer(event.pointer, GestureDisposition.accepted);

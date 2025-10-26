@@ -7,12 +7,12 @@ import '../models/pdf_template.dart';
 
 /// Loads PDF templates from bundled assets and prepares background images.
 class PdfTemplateLoader {
-  PdfTemplateLoader({AssetBundle? bundle}) : _bundle = bundle ?? rootBundle;
+  PdfTemplateLoader({final AssetBundle? bundle}) : _bundle = bundle ?? rootBundle;
 
   final AssetBundle _bundle;
   PdfTemplate? _cachedTemplate;
 
-  Future<PdfTemplate> load(PdfTemplateConfig config) async {
+  Future<PdfTemplate> load(final PdfTemplateConfig config) async {
     if (_cachedTemplate != null) {
       return _cachedTemplate!;
     }
@@ -21,7 +21,7 @@ class PdfTemplateLoader {
     final bytes = assetData.buffer.asUint8List();
     final rasters = await Printing.raster(bytes, dpi: config.rasterDpi).toList();
 
-    final sortedPages = List<PdfTemplatePageConfig>.from(config.pages)..sort((a, b) => a.page.compareTo(b.page));
+    final sortedPages = List<PdfTemplatePageConfig>.from(config.pages)..sort((final a, final b) => a.page.compareTo(b.page));
 
     final pages = <PdfTemplatePage>[];
     for (final pageConfig in sortedPages) {
@@ -35,7 +35,7 @@ class PdfTemplateLoader {
       final backgroundImage = MemoryImage(backgroundBytes);
 
       final fieldsForPage = pageConfig.fields
-          .where((field) => field.pageIndex == pageConfig.page)
+          .where((final field) => field.pageIndex == pageConfig.page)
           .toList(growable: false);
 
       pages.add(

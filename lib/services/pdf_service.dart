@@ -5,7 +5,7 @@ import '../models/pdf_template.dart';
 import 'pdf_exporters.dart';
 
 abstract interface class PdfGenerationService {
-  Future<Uint8List> buildFilledPdf(PdfFormData data);
+  Future<Uint8List> buildFilledPdf(final PdfFormData data);
   String get templateAssetPath;
   String get templateName;
 }
@@ -13,7 +13,7 @@ abstract interface class PdfGenerationService {
 // Default implementation of PdfGenerationService.
 // The controller uses this service as a connection between the UI and the PDF exporter.
 class DefaultPdfGenerationService implements PdfGenerationService {
-  DefaultPdfGenerationService({required PdfExporter exporter, required String templateAssetPath, String? templateName})
+  DefaultPdfGenerationService({required final PdfExporter exporter, required final String templateAssetPath, final String? templateName})
     : _exporter = exporter,
       _templateAssetPath = templateAssetPath,
       _templateName = _resolveTemplateName(explicitName: templateName, assetPath: templateAssetPath);
@@ -33,7 +33,7 @@ class DefaultPdfGenerationService implements PdfGenerationService {
   final String _templateName;
 
   @override
-  Future<Uint8List> buildFilledPdf(PdfFormData data) {
+  Future<Uint8List> buildFilledPdf(final PdfFormData data) {
     return _exporter.export(data);
   }
 
@@ -43,7 +43,7 @@ class DefaultPdfGenerationService implements PdfGenerationService {
   @override
   String get templateName => _templateName;
 
-  static String _resolveTemplateName({String? explicitName, required String assetPath}) {
+  static String _resolveTemplateName({final String? explicitName, required final String assetPath}) {
     final candidate = explicitName?.trim();
     if (candidate != null && candidate.isNotEmpty) {
       return candidate;

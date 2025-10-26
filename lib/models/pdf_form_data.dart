@@ -7,7 +7,7 @@ class PdfFormData {
     required this.isKewl,
     required this.signatureStrokes,
     required this.signatureCanvasSize,
-    Map<String, dynamic>? additionalValues,
+    final Map<String, dynamic>? additionalValues,
   }) : additionalValues = Map.unmodifiable(additionalValues ?? const {});
 
   final String firstName;
