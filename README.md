@@ -1,51 +1,48 @@
-# Flutter PDF Editor
-This is an example of how you can complete in app forms and rasterize them to a PDF document.
+# Example App
 
-Pages can be configured with very specific fields. You can modify or add new fields.
+This directory holds a minimal Flutter app that demonstrates the `pdf_edit` package.
 
-To use, make sure to run `flutter pub get` and choose a device (mobile recommended). Then `flutter run` or debug with what ever tool you want.
+## Getting started
 
-The example pdf in assets demonstrates a simple pdf with different types of fields. Some can required or not. You define that in the field.
+1. From the repository root run:
+   ```sh
+   flutter pub get
+   cd example
+   flutter pub get
+   ```
+2. Choose an emulator or physical device.
+3. Launch the sample:
+   ```sh
+   flutter run
+   ```
 
-## Architecture Overview
+The app collects a few fields, captures a signature, and uses `PdfDocumentBuilder` to generate the filled PDF. The bytes are saved to disk so you can inspect them with any viewer on the device.
 
-At runtime the app follows a simple pipeline: the UI collects values, the controller hands them to a service, and the exporter merges them with the configured template. You do **not** need to know any PDF internals—each step has a focused role.
+## Project structure
 
-```mermaid
-flowchart LR
-	subgraph UI
-		A["PdfFormPage<br/>SignaturePad"]
-	end
-	A --> B[PdfFormData]
-	B --> C[PdfFormController]
-	C --> D["PdfGenerationService<br/>(DefaultPdfGenerationService)"]
-	D --> E["PdfTemplateLoader<br/>(rasterizes asset)"]
-	E --> F["PdfTemplate<br/>+ pages/backgrounds"]
-	D --> G["PdfExporter<br/>(_TemplatePdfExporter)"]
-	F --> G
-	G --> H[PDF bytes]
-	H --> I[Printing.sharePdf / Printing.layoutPdf]
-```
+- `lib/` – Flutter widgets and state used in the demo UI.
+- `assets/` – Sample PDF form bundled with the app. Declare additional assets in `pubspec.yaml` if needed. You will also find `getfields.py`, a helper script for inspecting form fields.
+- `README.md` – You are here.
 
-- **Configuration layer** (`PdfTemplateConfig`, `PdfTemplatePageConfig`, builders): declares *what* should appear on each page—field bindings, coordinates, sizes. Pure data, easy to read.
-- **Loader** (`PdfTemplateLoader`): takes the config, rasterizes the template PDF into background images, and outputs a ready-to-use `PdfTemplate`.
-- **Runtime template** (`PdfTemplate`, `PdfTemplatePage`): cached result that combines the background artwork with the fields for each page.
-- **Exporter** (`PdfExporter`, `_TemplatePdfExporter`): merges user data (`PdfFormData`) with the runtime template and produces the final PDF bytes.
+## Notes
 
-This separation keeps the code approachable: configuration stays declarative, rasterization happens once per asset, and rendering is a straightforward data merge.
+- Make sure a device or emulator is connected before running `flutter run`.
+- Update dependencies with `flutter pub upgrade` if you want to try newer package versions.
+- The sample depends on the local `pdf_edit` package via a path reference in `pubspec.yaml`.
+- Using `adb exec-out run-as com.example.pdf_edit cat code_cache/example-insert-time-stamp.pdf > example.pdf` will transfer the pdf to your current working directory. Using powershell will break the file, it transfers "text objects" versus raw bytes.
 
-## getfields.py
-This script takes in an argument for the path of the PDF file. It will extract all fields and export then into a json document for reference.
-You could make it generate form fields for the Flutter project. But it is usable and good for now.
+## Using `getfields.py`
 
-Note, the geneneration of the fields could differ depending on they're defined. You can do the insertion of fields with trial and error.
-However, inserting form fields into PDF's seems like a nice to have. I used a free service to do so. I also made my fields "hidden", but you can still parse them with PyPDF2.
+The helper script under `assets/getfields.py` reads a PDF and reports the locations of each form field.
 
-Website/Service Used to Apply Fields: https://www.pdfgear.com/create-fillable-pdf/
+1. Install the Python dependency once:
+   ```sh
+   pip install PyPDF2
+   ```
+2. Run the script from the repository root (or anywhere) with the target PDF:
+   ```sh
+   python example/assets/getfields.py path/to/form.pdf
+   ```
+3. Review the printed output for page numbers and raw coordinates, or inspect the generated JSON file (`<pdf_name>.form_fields.json` by default). The values can be copied directly into `PdfDocumentBuilder` when defining bindings.
 
-# Screenshots
-<img width="300" height="650" alt="Screenshot 1" src="https://github.com/user-attachments/assets/b930628d-7f6a-488b-b006-c01c0951d033" />
-<img width="300" height="650" alt="Screenshot 2" src="https://github.com/user-attachments/assets/87a6ef1f-a2d5-43b7-84d0-478c716157bc" />
-<img width="300" height="650" alt="Screenshot 3" src="https://github.com/user-attachments/assets/a61bc94e-e817-48b0-b617-037d0e311172" />
-<img width="300" height="650" alt="Screenshot 4" src="https://github.com/user-attachments/assets/e601324c-669b-4b6f-9135-5fb3bd8440e2" />
-<img width="300" height="650" alt="Screenshot 5" src="https://github.com/user-attachments/assets/0343226d-3c3b-46d7-8d87-0fbf1b3daab3" />
+Pass `--output <path>` to control where the JSON file is written.

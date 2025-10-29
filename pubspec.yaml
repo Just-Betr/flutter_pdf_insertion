@@ -1,5 +1,5 @@
-name: pdf_edit
-description: "A new Flutter project."
+name: pdf_edit_example
+description: "Example app for the pdf_edit package."
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -9,11 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-  cupertino_icons: ^1.0.8
-  flutter_hooks: ^0.20.5
-  pdf: ^3.10.8
-  printing: ^5.13.3
+  pdf_edit:
+    path: ../
 
 dev_dependencies:
   flutter_test:

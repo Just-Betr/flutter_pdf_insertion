@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
-import 'controllers/pdf_form_controller.dart';
-import 'services/pdf_service.dart';
-import 'views/pdf_form_page.dart';
+
+import 'pdf_form_page.dart';
 
 void main() {
   runApp(PdfEditApp());
 }
 
 class PdfEditApp extends StatelessWidget {
-  PdfEditApp({super.key})
-    : _controller = DefaultPdfFormController(pdfService: PdfGenerationServiceFactory.createDefault());
-
-  final PdfFormController _controller;
+  const PdfEditApp({super.key});
 
   @override
   Widget build(final BuildContext context) {
@@ -22,7 +18,7 @@ class PdfEditApp extends StatelessWidget {
         useMaterial3: true,
         inputDecorationTheme: const InputDecorationTheme(border: OutlineInputBorder()),
       ),
-      home: PdfFormPage(controller: _controller),
+      home: const PdfFormPage(),
     );
   }
 }
